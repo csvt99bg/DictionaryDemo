@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
@@ -16,6 +17,11 @@ import com.example.dictionarydemo.R;
 import com.example.dictionarydemo.SQLHelper;
 import com.example.dictionarydemo.databinding.ShowLogoBinding;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShowLogo extends Activity {
@@ -23,7 +29,7 @@ public class ShowLogo extends Activity {
     SQLHelper sqlHelper;
     List<Dictionary> dictionaryList;
     // Set Time Waitting
-    private final int TimeWait = 3000;
+    private final int TimeWait = 5000;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -39,9 +45,11 @@ public class ShowLogo extends Activity {
         else {
             binding.layoutLoad.setVisibility(View.VISIBLE);
             new LoadData().execute(Define.LINK_API);
+
             startAct(TimeWait);
         }
     }
+
     private class LoadData extends AsyncTask<String, Void, List<String>>{
 
         @Override
@@ -66,6 +74,8 @@ public class ShowLogo extends Activity {
             }
         }
     }
+
+
     private void startAct(int time){
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/

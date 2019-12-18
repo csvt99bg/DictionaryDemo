@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         sqlHelper= new SQLHelper(getBaseContext());
         dictionary = sqlHelper.getAllDictionary();
         size= dictionary.size();
+
         binding.etSearch.setInputType(InputType.TYPE_NULL);
         editText();
         randomWords();
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 binding.btCancel.setVisibility(View.INVISIBLE);
                 binding.rcvSearch.setVisibility(View.INVISIBLE);
                 binding.etSearch.setText("");
+
                // binding.etSearch.setInputType(InputType.TYPE_NULL);
 
             }
@@ -97,33 +99,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+///////////////////////////////////// gợi ý từ ............ ----->xong
     private void filter(String text){
         List<Dictionary> filterList= new ArrayList<>();
-        for (Dictionary item: dictionary){
-            if(item.getEnglish().toLowerCase().indexOf(text.toLowerCase())==0){
-                filterList.add(item);
+        if(changeTranslator==true) {
+            for (Dictionary item : dictionary) {
+                if (item.getEnglish().toLowerCase().indexOf(text.toLowerCase()) == 0) {
+                    filterList.add(item);
+                }
             }
+        }else {
+            for (Dictionary item : dictionary) {
+                if (item.getVietnamese().toLowerCase().indexOf(text.toLowerCase()) == 0) {
+                    filterList.add(item);
+                }
+            }
+
         }
         if(filterList.size()==0)
-            filterList.add(new Dictionary("trống", "trống", true));
+            filterList.add(new Dictionary("trống", "trống"));
         adapter.filterList(filterList);
     }
 
     //////////////////////////////////////////
     private void editText(){
-//        //hide keyboard
-//        binding.etSearch.setInputType(InputType.TYPE_NULL);
-//     //   show keyboard and btSearch when click on editText
-//        binding.etSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                binding.etSearch.setInputType(InputType.TYPE_CLASS_TEXT);
-//                binding.etSearch.requestFocus();
-//                InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                mgr.showSoftInput(binding.etSearch, InputMethodManager.SHOW_FORCED);
-//            }
-//        });
         binding.etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -150,10 +149,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void clickSearch(){
-        //.....
-    }
     void hideViewHome(){
         binding.layoutRandomWord.setVisibility(View.INVISIBLE);
         binding.layoutHistory.setVisibility(View.INVISIBLE);
@@ -172,7 +167,11 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnClickWord(new IOnClickWord() {
             @Override
             public void onClick(Dictionary in4Word) {
-                Toast.makeText(getBaseContext(), in4Word.getVietnamese(), Toast.LENGTH_LONG).show();
+                if (changeTranslator==true) {
+                    Toast.makeText(getBaseContext(), in4Word.getVietnamese(), Toast.LENGTH_LONG).show();
+                }else {
+                    Toast.makeText(getBaseContext(), in4Word.getEnglish(), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
